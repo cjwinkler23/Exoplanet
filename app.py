@@ -40,8 +40,9 @@ if image_file:
             compressed_image = compress_and_resize(image_file)
             base64_image = base64.b64encode(compressed_image.read()).decode("utf-8")
 
-            response = client.images.generate(
+            response = client.images.edit(
                 model="gpt-image-1",
+                image=compressed_image,
                 prompt=(
                     "You are an exoplanet visualization assistant. When a user uploads a hand-drawn exoplanet sketch, "
                     "create a scientifically plausible, photorealistic exoplanet based on the drawing. "
@@ -49,14 +50,12 @@ if image_file:
                     "into a high-resolution space image. Place the planet in realistic space with physically consistent lighting "
                     "and atmospheric detail."
                 ),
-                image=base64_image,
                 size="1024x1024"
             )
 
         st.success("Done!")
 
-        st.image(
-            response.data[0].url,
-            caption="Generated Exoplanet",
-            use_container_width=True
-        )
+        image_base64 = response.data[0].b64_json
+        image_bytes = base64.b64decode(image_base64)
+        
+        st.image(image_bytes, caption="Generated Exoplanet", use_container_width=True)
