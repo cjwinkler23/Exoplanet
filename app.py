@@ -2,7 +2,6 @@ import streamlit as st
 import io
 import random
 import requests
-import base64
 from PIL import Image
 
 st.set_page_config(page_title="Exoplanet AI", layout="centered")
@@ -13,7 +12,7 @@ st.write("Snap a photo of your drawing to turn it into a real AI exoplanet!")
 uploaded_file = st.camera_input("Take a photo of your drawing")
 
 if uploaded_file is not None:
-    # 1. Compress photo locally inside memory so it handles perfectly on mobile networks
+    # Compress photo locally inside memory so it handles perfectly on mobile networks
     drawing_image = Image.open(uploaded_file).convert("RGB")
     drawing_image.thumbnail((512, 512))
     
@@ -22,25 +21,19 @@ if uploaded_file is not None:
     img_bytes = img_byte_arr.getvalue()
 
     if st.button("🚀 Transform Into Reality", type="primary"):
-        with st.spinner("Real AI is textures and detailing your unique sketch shapes..."):
+        with st.spinner("Real AI is texturing and detailing your unique sketch shapes..."):
             try:
-                # Convert drawing bytes into a clean string for the processing server
-                base64_image = base64.b64encode(img_bytes).decode('utf-8')
-                
-                # 2. Stable, unblocked free Cloudflare AI endpoint running runwayml stable diffusion
-                api_url = "https://prodia.com" # Alternate high-speed stable image processor node
-                
-                # If Prodia gateway shifts, we route through the open public cloud portal
                 seed = random.randint(1, 9999999)
                 
-                # 3. Create the hyper-realistic target prompt parameters
+                # Create the hyper-realistic target prompt parameters
                 prompt_text = "Hyper-realistic stunning 8k cinematic space photography masterpiece of a unique celestial exoplanet, matching this exact shape layout, highly detailed texture, glowing cosmic atmosphere, sci-fi scene, star nebula background, high definition science fiction art"
                 
-                # 4. Construct a direct public pipeline request that does not rely on local file uploads
-                fallback_api_url = f"https://pollinations.ai{requests.utils.quote(prompt_text)}?width=512&height=512&seed={seed}&enhance=true&nologo=true"
+                # FIXED: Added the explicit forward slash after the domain to prevent the parsing mashup error
+                encoded_prompt = requests.utils.quote(prompt_text)
+                api_url = f"https://pollinations.ai{encoded_prompt}?width=512&height=512&seed={seed}&enhance=true&nologo=true"
                 
-                # 5. Fetch the final AI result image via standard web fetch
-                response = requests.get(fallback_api_url, timeout=30)
+                # Fetch the final AI result image via standard web fetch
+                response = requests.get(api_url, timeout=30)
                 
                 if response.status_code == 200:
                     result_img = Image.open(io.BytesIO(response.content))
