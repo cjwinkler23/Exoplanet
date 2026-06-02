@@ -11,7 +11,7 @@ st.write("Snap a photo of your drawing to turn it into a real AI exoplanet!")
 uploaded_file = st.camera_input("Take a photo of your drawing")
 
 if uploaded_file is not None:
-    # 1. Compress phone photo inside memory so it sends fast
+    # Compress phone photo inside memory so it sends fast over networks
     drawing_image = Image.open(uploaded_file).convert("RGB")
     drawing_image.thumbnail((512, 512))
     
@@ -22,22 +22,27 @@ if uploaded_file is not None:
     if st.button("🚀 Transform Into Reality", type="primary"):
         with st.spinner("AI is terraforming your planet..."):
             
-            # Fast, free Hugging Face Serverless API URL
+            # Reads the token securely from your Streamlit App settings
+            HF_TOKEN = st.secrets["HF_TOKEN"]
+            
             API_URL = "https://huggingface.co"
+            headers = {"Authorization": f"Bearer {HF_TOKEN}"}
             
             payload = {
                 "inputs": "A hyper-realistic stunning cinematic space photography version of this planet, 8k resolution, sci-fi scene",
                 "image": img_bytes,
-                "parameters": {"strength": 0.6} # 0.6 means it keeps your drawing layout shape
+                "parameters": {"strength": 0.6}
             }
             
             try:
-                response = requests.post(API_URL, json=payload)
+                response = requests.post(API_URL, headers=headers, json=payload)
                 
-                # Show the real AI image directly on screen
+                if response.status_code != 200:
+                    response = requests.post(API_URL, headers=headers, data=img_bytes)
+                
                 result_img = Image.open(io.BytesIO(response.content))
                 st.image(result_img, caption="Your AI Generated Exoplanet", use_container_width=True)
                 st.balloons()
                 
             except Exception as e:
-                st.error("Server glitch. Tap the button again to retry!")
+                st.error("Server is busy loading the AI model. Tap the button again to retry!")
