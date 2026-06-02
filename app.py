@@ -28,7 +28,7 @@ if uploaded_file:
                         "content": [
                             {
                                 "type": "input_text",
-                                "text": "Transform this exoplanet drawing into a hyper-realistic cinematic astrophysical scene. Keep structure but enhance realism, lighting, and atmosphere."
+                                "text": "You are an exoplanet visualization assistant. When a user uploads a hand-drawn exoplanet sketch, create a scientifically plausible, photorealistic exoplanet based on the drawing. Preserve the overall shape, cloud bands, storms, colors, and major features while converting the sketch into a high-resolution space image. Place the planet in realistic space with physically consistent lighting and atmospheric detail."
                             },
                             {
                                 "type": "input_image",
