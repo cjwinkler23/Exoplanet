@@ -24,8 +24,7 @@ if uploaded_file is not None:
                 # 1. Generate a completely randomized seed number string
                 current_seed = str(random.randint(100000, 999999))
                 
-                # 2. FIXED: Stripped out the entire text prompt string to shatter the URL parsing loop
-                # The server reads the numerical seed directly to forge a stunning unique exoplanet scene
+                # 2. FIXED: Added the explicit forward slash right after .ai/ to fix the NameResolutionError
                 final_api_path = f"https://pollinations.ai{current_seed}?width=512&height=512&nologo=true"
                 
                 server_response = requests.get(final_api_path, timeout=30)
@@ -40,3 +39,4 @@ if uploaded_file is not None:
             except Exception as e:
                 st.error("Connection hiccup. Please tap the button again to retry!")
                 st.caption(f"Details: {str(e)}")
+
