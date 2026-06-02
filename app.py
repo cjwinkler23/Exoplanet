@@ -34,7 +34,7 @@ if uploaded_file is not None:
                 
                 # 3. We use the working SDXL model but inject strict text styling boundaries
                 output_image = client.text_to_image(
-                    prompt=f"A hyper-realistic stunning 8k cinematic space photography masterpiece of a celestial exoplanet. You must strictly match and clone the exact composition structure, line positions, circle placement, rings, and layout shown in this drawing: data:image/jpeg;base64,{base64_image}",
+                    prompt=f"Make this image of an exoplanet look slightly more realistic but keep it a sphere and make sure it looks like a planet: data:image/jpeg;base64,{base64_image}",
                     negative_prompt="different layout, modified composition, ignoring the source drawing, changing the shape, text, labels, words, bad anatomy, deformed planet",
                     model="stabilityai/stable-diffusion-xl-base-1.0"
                 )
