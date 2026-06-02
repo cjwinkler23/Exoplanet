@@ -28,12 +28,11 @@ if uploaded_file is not None:
                 # 2. Use the official client to bypass manual server routing blocks
                 client = InferenceClient(api_key=token)
                 
-                # 3. Call a highly active, stable realistic image model
-                # This automatically extracts your drawing layout and builds a planet photo
+                # 3. Use Stable Diffusion 2.1 which guarantees Image-to-Image support
                 output_image = client.image_to_image(
                     img_bytes,
-                    prompt="Hyper-realistic stunning cinematic space photography version of this planet, 8k resolution, sci-fi scene",
-                    model="stabilityai/stable-diffusion-xl-base-1.0"
+                    prompt="A hyper-realistic stunning cinematic space photography version of this planet, 8k resolution, sci-fi scene",
+                    model="stabilityai/stable-diffusion-2-1"
                 )
                 
                 # Display the authentic generated picture smoothly
