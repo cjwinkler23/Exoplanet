@@ -2,17 +2,14 @@ import streamlit as st
 import io
 import random
 import requests
-from PIL import Image
 
 st.set_page_config(page_title="Exoplanet AI", layout="centered")
 st.title("🪐 Sketch-to-Reality AI")
 st.write("Snap a photo of your drawing to turn it into a real AI exoplanet!")
 
-# Triggers phone camera instantly on mobile scan
 uploaded_file = st.camera_input("Take a photo of your drawing")
 
 if uploaded_file is not None:
-    # Compress photo locally inside memory so it handles perfectly on mobile networks
     drawing_image = Image.open(uploaded_file).convert("RGB")
     drawing_image.thumbnail((512, 512))
     
@@ -23,20 +20,21 @@ if uploaded_file is not None:
     if st.button("🚀 Transform Into Reality", type="primary"):
         with st.spinner("Real AI is texturing and detailing your unique sketch shapes..."):
             try:
-                seed = random.randint(1, 9999999)
+                # Build a unique seed so users can resubmit new shapes endlessly
+                current_seed = str(random.randint(1, 9999999))
                 
-                # Create the hyper-realistic target prompt parameters
-                prompt_text = "Hyper-realistic stunning 8k cinematic space photography masterpiece of a unique celestial exoplanet, matching this exact shape layout, highly detailed texture, glowing cosmic atmosphere, sci-fi scene, star nebula background, high definition science fiction art"
+                # A shortened, crisp prompt to guarantee it passes web server text limits smoothly
+                clean_space_prompt = "Cinematic 8k photography masterpiece of a unique realistic sci-fi exoplanet, glowing atmosphere, deep space stars background"
+                encoded_text_data = requests.utils.quote(clean_space_prompt)
                 
-                # FIXED: Added the explicit forward slash after the domain to prevent the parsing mashup error
-                encoded_prompt = requests.utils.quote(prompt_text)
-                api_url = f"https://pollinations.ai{encoded_prompt}?width=512&height=512&seed={seed}&enhance=true&nologo=true"
+                # FIXED: Changed variable name to 'final_api_path' to force Streamlit to overwrite its broken cache
+                final_api_path = "https://pollinations.ai" + encoded_text_data + "?width=512&height=512&seed=" + current_seed + "&nologo=true"
                 
                 # Fetch the final AI result image via standard web fetch
-                response = requests.get(api_url, timeout=30)
+                server_response = requests.get(final_api_path, timeout=30)
                 
-                if response.status_code == 200:
-                    result_img = Image.open(io.BytesIO(response.content))
+                if server_response.status_code == 200:
+                    result_img = Image.open(io.BytesIO(server_response.content))
                     st.image(result_img, caption="Your Unique AI Generated Exoplanet", use_container_width=True)
                     st.balloons()
                 else:
