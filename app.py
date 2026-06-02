@@ -8,11 +8,9 @@ st.set_page_config(page_title="Exoplanet AI", layout="centered")
 st.title("🪐 Sketch-to-Reality AI")
 st.write("Snap a photo of your drawing to turn it into a real AI exoplanet!")
 
-# Triggers phone camera instantly on mobile scan
 uploaded_file = st.camera_input("Take a photo of your drawing")
 
 if uploaded_file is not None:
-    # Compress photo inside memory so it sends fast over networks
     drawing_image = Image.open(uploaded_file).convert("RGB")
     drawing_image.thumbnail((512, 512))
     
@@ -21,29 +19,44 @@ if uploaded_file is not None:
     img_bytes = img_byte_arr.getvalue()
 
     if st.button("🚀 Transform Into Reality", type="primary"):
-        with st.spinner("AI is aligning textures to your drawing structure..."):
+        with st.spinner("AI is analyzing your sketch shapes..."):
             try:
-                # 1. Pull token securely from Streamlit Secrets
                 token = st.secrets["HF_TOKEN"]
-                
-                # 2. Use the official client to bypass manual server routing blocks
                 client = InferenceClient(api_key=token)
                 
-                # Convert the image bytes into a clean text-based data stream the API can read
+                # Clean base64 format for the Vision AI model
                 base64_image = base64.b64encode(img_bytes).decode('utf-8')
+                image_url = f"data:image/jpeg;base64,{base64_image}"
                 
-                # 3. We use the working SDXL model but inject strict text styling boundaries
+                # 1. Use a dedicated Vision Model to look at the sketch and describe its exact structure
+                messages = [
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": "Look closely at the composition layout, lines, and shapes in this planet drawing. Write a 1-sentence description detailing what a hyper-realistic, 8k cinematic space photography masterpiece version of this exact layout would look like. Describe the placement of the planet, rings, and surface features exactly as drawn. Output ONLY the description sentence."},
+                            {"type": "image_url", "image_url": {"url": image_url}}
+                        ]
+                    }
+                ]
+                
+                chat_completion = client.chat.completion(
+                    model="Qwen/Qwen2.5-VL-7B-Instruct",
+                    messages=messages,
+                    max_tokens=100
+                )
+                
+                analyzed_prompt = chat_completion.choices[0].message.content
+                
+                # 2. Feed that smart structural description directly into the stable image generator
                 output_image = client.text_to_image(
-                    prompt=f"Make this image of an exoplanet look slightly more realistic but keep it a sphere and make sure it looks like a planet out in space: data:image/jpeg;base64,{base64_image}",
-                    negative_prompt="different layout, modified composition, ignoring the source drawing, changing the shape, text, labels, words, bad anatomy, deformed planet",
+                    prompt=f"{analyzed_prompt.strip()}, stunning photorealistic celestial exoplanet, highly detailed texture, epic deep space stars background, masterpiece sci-fi movie scene",
+                    negative_prompt="cartoon, drawing, sketch, writing, words, text, lines, notebook paper, bad composition, blurry, low quality",
                     model="stabilityai/stable-diffusion-xl-base-1.0"
                 )
                 
-                # Display the authentic generated picture smoothly
-                st.image(output_image, caption="Your Aligned AI Exoplanet", use_container_width=True)
+                st.image(output_image, caption="Your Reimagined AI Exoplanet", use_container_width=True)
                 st.balloons()
                 
             except Exception as e:
                 st.error("The network connection timed out. Please tap the button once more to generate!")
                 st.caption(f"Details: {str(e)}")
-
