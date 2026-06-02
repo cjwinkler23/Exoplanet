@@ -8,26 +8,19 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 st.title("Exoplanet Drawing Enhancer 🌌")
 
-st.write("Take a photo or upload your exoplanet drawing")
-
-# Camera-first UX for QR scans
-image_file = st.camera_input("Take a photo")
-
-if image_file is None:
-    image_file = st.file_uploader("Or upload an image", type=["png", "jpg", "jpeg"])
-
+image_file = st.file_uploader(
+    "Choose an image",
+    type=["png", "jpg", "jpeg"]
+)
 
 def compress_and_resize(image_file):
     image = Image.open(image_file)
 
-    # Convert RGBA → RGB if needed (avoids errors)
     if image.mode != "RGB":
         image = image.convert("RGB")
 
-    # Resize while keeping aspect ratio (max 1024px)
     image.thumbnail((1024, 1024))
 
-    # Compress image
     buffer = io.BytesIO()
     image.save(buffer, format="JPEG", quality=85)
     buffer.seek(0)
@@ -39,12 +32,11 @@ if image_file:
 
     st.image(image_file, caption="Input image", use_container_width=True)
 
-    if st.button("Generate Hyper-Realistic Exoplanet"):
+    if st.button("Generate Exoplanet Visualization"):
 
-        with st.spinner("Compressing image and sending to AI..."):
+        with st.spinner("Rendering exoplanet..."):
 
             compressed_image = compress_and_resize(image_file)
-
             base64_image = base64.b64encode(compressed_image.read()).decode("utf-8")
 
             response = client.responses.create(
@@ -74,4 +66,3 @@ if image_file:
 
         st.success("Done!")
         st.write(response.output)
-
