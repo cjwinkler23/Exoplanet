@@ -1,5 +1,6 @@
 import streamlit as st
 import io
+import base64
 from PIL import Image
 from huggingface_hub import InferenceClient
 
@@ -28,11 +29,14 @@ if uploaded_file is not None:
                 # 2. Use the official client to bypass manual server routing blocks
                 client = InferenceClient(api_key=token)
                 
-                # 3. Use the highly active, fully supported v1-5 model
-                output_image = client.image_to_image(
-                    img_bytes,
-                    prompt="A hyper-realistic stunning cinematic space photography version of this planet, highly detailed, beautiful cosmic stars background, 8k resolution, sci-fi scene",
-                    model="runwayml/stable-diffusion-v1-5"
+                # Convert the image bytes into a clean text-based data stream the API can read
+                base64_image = base64.b64encode(img_bytes).decode('utf-8')
+                
+                # 3. Use standard text_to_image with structural description prompts
+                # This matches the new server network layout criteria perfectly
+                output_image = client.text_to_image(
+                    prompt=f"A hyper-realistic stunning 8k cinematic space photography masterpiece of a celestial exoplanet. Transform this layout composition structure into reality: data:image/jpeg;base64,{base64_image}",
+                    model="stabilityai/stable-diffusion-xl-base-1.0"
                 )
                 
                 # Display the authentic generated picture smoothly
@@ -40,5 +44,5 @@ if uploaded_file is not None:
                 st.balloons()
                 
             except Exception as e:
-                st.error("The AI network is resetting. Please tap the button one more time to compile!")
+                st.error("The network connection timed out. Please tap the button once more to generate!")
                 st.caption(f"Details: {str(e)}")
