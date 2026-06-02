@@ -2,6 +2,7 @@ import streamlit as st
 import io
 import random
 import requests
+from PIL import Image # FIXED: Added the missing Pillow image engine import
 
 st.set_page_config(page_title="Exoplanet AI", layout="centered")
 st.title("🪐 Sketch-to-Reality AI")
@@ -27,7 +28,7 @@ if uploaded_file is not None:
                 clean_space_prompt = "Cinematic 8k photography masterpiece of a unique realistic sci-fi exoplanet, glowing atmosphere, deep space stars background"
                 encoded_text_data = requests.utils.quote(clean_space_prompt)
                 
-                # FIXED: Changed variable name to 'final_api_path' to force Streamlit to overwrite its broken cache
+                # Clean URL path route
                 final_api_path = "https://pollinations.ai" + encoded_text_data + "?width=512&height=512&seed=" + current_seed + "&nologo=true"
                 
                 # Fetch the final AI result image via standard web fetch
