@@ -28,11 +28,11 @@ if uploaded_file is not None:
                 # 2. Use the official client to bypass manual server routing blocks
                 client = InferenceClient(api_key=token)
                 
-                # 3. Use Stable Diffusion 2.1 which guarantees Image-to-Image support
+                # 3. Use the highly active, fully supported v1-5 model
                 output_image = client.image_to_image(
                     img_bytes,
-                    prompt="A hyper-realistic stunning cinematic space photography version of this planet, 8k resolution, sci-fi scene",
-                    model="stabilityai/stable-diffusion-2-1"
+                    prompt="A hyper-realistic stunning cinematic space photography version of this planet, highly detailed, beautiful cosmic stars background, 8k resolution, sci-fi scene",
+                    model="runwayml/stable-diffusion-v1-5"
                 )
                 
                 # Display the authentic generated picture smoothly
