@@ -2,6 +2,7 @@ import streamlit as st
 import io
 import random
 import requests
+import urllib.parse
 from PIL import Image
 
 st.set_page_config(page_title="Exoplanet AI", layout="centered")
@@ -29,9 +30,11 @@ if uploaded_file is not None:
                 # Create the hyper-realistic target prompt parameters
                 prompt_text = "Hyper-realistic stunning 8k cinematic space photography masterpiece of a celestial exoplanet, matching this exact shape layout, highly detailed texture, glowing cosmic atmosphere, sci-fi scene, star nebula background"
                 
-                # FIXED: Corrected the clean URL path structure to prevent parsing text mashups
-                encoded_prompt = requests.utils.quote(prompt_text)
-                api_url = f"https://pollinations.ai{encoded_prompt}?width=512&height=512&seed={seed}&nologo=true"
+                # Standard Python URL encoding tool
+                encoded_prompt = urllib.parse.quote(prompt_text)
+                
+                # Hard-coded clean address layout to completely bypass string parsing errors
+                api_url = "https://pollinations.ai" + encoded_prompt + "?width=512&height=512&seed=" + str(seed) + "&nologo=true"
                 
                 # Package the camera snap as a standard form upload stream
                 files = {"image": ("sketch.jpg", img_bytes, "image/jpeg")}
@@ -49,4 +52,3 @@ if uploaded_file is not None:
             except Exception as e:
                 st.error("Connection hiccup. Please tap the button again to retry!")
                 st.caption(f"Details: {str(e)}")
-
