@@ -38,11 +38,12 @@ if image_file:
         with st.spinner("Rendering exoplanet..."):
 
             compressed_image = compress_and_resize(image_file)
-            base64_image = base64.b64encode(compressed_image.read()).decode("utf-8")
 
+            compressed_image.seek(0)
+            
             response = client.images.edit(
                 model="gpt-image-1",
-                image=compressed_image,
+                image=("image.jpg", compressed_image, "image/jpeg"),
                 prompt=(
                     "You are an exoplanet visualization assistant. When a user uploads a hand-drawn exoplanet sketch, "
                     "create a scientifically plausible, photorealistic exoplanet based on the drawing. "
