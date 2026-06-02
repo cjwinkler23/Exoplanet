@@ -40,7 +40,7 @@ if image_file:
             base64_image = base64.b64encode(compressed_image.read()).decode("utf-8")
 
             response = client.responses.create(
-                model="gpt-4.1-mini",
+                model="gpt-image-1",
                 input=[
                     {
                         "role": "user",
