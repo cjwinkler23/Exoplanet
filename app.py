@@ -9,6 +9,7 @@ st.set_page_config(page_title="Exoplanet AI", layout="centered")
 st.title("🪐 Sketch-to-Reality AI")
 st.write("Snap a photo of your drawing to turn it into a real AI exoplanet!")
 
+# Triggers phone camera instantly on mobile scan
 uploaded_file = st.camera_input("Take a photo of your drawing")
 
 if uploaded_file is not None:
@@ -30,7 +31,7 @@ if uploaded_file is not None:
                 
                 if upload_response.status_code != 200:
                     st.error("Camera data error. Please snap the picture again under better lighting!")
-                    return
+                    st.stop() # FIXED: Changed 'return' to 'st.stop()' to clear the SyntaxError
                 
                 # Extract the clean, direct link to your drawing
                 drawing_link = upload_response.json()["data"]["url"]
@@ -56,3 +57,4 @@ if uploaded_file is not None:
             except Exception as e:
                 st.error("Connection hiccup. Please tap the button again to retry!")
                 st.caption(f"Details: {str(e)}")
+
