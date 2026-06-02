@@ -24,11 +24,9 @@ if uploaded_file is not None:
                 token = st.secrets["HF_TOKEN"]
                 client = InferenceClient(api_key=token)
                 
-                # Clean base64 format for the Vision AI model
                 base64_image = base64.b64encode(img_bytes).decode('utf-8')
                 image_url = f"data:image/jpeg;base64,{base64_image}"
                 
-                # 1. Use a dedicated Vision Model to look at the sketch and describe its exact structure
                 messages = [
                     {
                         "role": "user",
@@ -39,7 +37,8 @@ if uploaded_file is not None:
                     }
                 ]
                 
-                chat_completion = client.chat.completion(
+                # FIXED: Changed client.chat.completion to client.chat_completion
+                chat_completion = client.chat_completion(
                     model="Qwen/Qwen2.5-VL-7B-Instruct",
                     messages=messages,
                     max_tokens=100
@@ -47,7 +46,6 @@ if uploaded_file is not None:
                 
                 analyzed_prompt = chat_completion.choices[0].message.content
                 
-                # 2. Feed that smart structural description directly into the stable image generator
                 output_image = client.text_to_image(
                     prompt=f"{analyzed_prompt.strip()}, stunning photorealistic celestial exoplanet, highly detailed texture, epic deep space stars background, masterpiece sci-fi movie scene",
                     negative_prompt="cartoon, drawing, sketch, writing, words, text, lines, notebook paper, bad composition, blurry, low quality",
@@ -60,3 +58,4 @@ if uploaded_file is not None:
             except Exception as e:
                 st.error("The network connection timed out. Please tap the button once more to generate!")
                 st.caption(f"Details: {str(e)}")
+
