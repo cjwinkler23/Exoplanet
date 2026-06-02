@@ -19,6 +19,7 @@ def compress_and_resize(image_file):
     if image.mode != "RGB":
         image = image.convert("RGB")
 
+    # input cap (prevents huge uploads)
     image.thumbnail((1024, 1024))
 
     buffer = io.BytesIO()
@@ -32,37 +33,30 @@ if image_file:
 
     st.image(image_file, caption="Input image", use_container_width=True)
 
-    if st.button("Generate Exoplanet Visualization"):
+    if st.button("Generate Exoplanet Visualization 🌠"):
 
         with st.spinner("Rendering exoplanet..."):
 
             compressed_image = compress_and_resize(image_file)
             base64_image = base64.b64encode(compressed_image.read()).decode("utf-8")
 
-            response = client.responses.create(
+            response = client.images.generate(
                 model="gpt-image-1",
-                input=[
-                    {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "input_text",
-                                "text": (
-                                    "You are an exoplanet visualization assistant. When a user uploads a hand-drawn exoplanet sketch, "
-                                    "create a scientifically plausible, photorealistic exoplanet based on the drawing. "
-                                    "Preserve the overall shape, cloud bands, storms, colors, and major features while converting the sketch "
-                                    "into a high-resolution space image. Place the planet in realistic space with physically consistent lighting "
-                                    "and atmospheric detail."
-                                )
-                            },
-                            {
-                                "type": "input_image",
-                                "image_url": f"data:image/jpeg;base64,{base64_image}"
-                            }
-                        ]
-                    }
-                ]
+                prompt=(
+                    "You are an exoplanet visualization assistant. When a user uploads a hand-drawn exoplanet sketch, "
+                    "create a scientifically plausible, photorealistic exoplanet based on the drawing. "
+                    "Preserve the overall shape, cloud bands, storms, colors, and major features while converting the sketch "
+                    "into a high-resolution space image. Place the planet in realistic space with physically consistent lighting "
+                    "and atmospheric detail."
+                ),
+                image=base64_image,
+                size="1024x1024"
             )
 
         st.success("Done!")
-        st.write(response.output)
+
+        st.image(
+            response.data[0].url,
+            caption="Generated Exoplanet",
+            use_container_width=True
+        )
