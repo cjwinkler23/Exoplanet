@@ -8,7 +8,11 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 st.title("Exoplanet Drawing Enhancer")
 
-uploaded_file = st.file_uploader("Upload your exoplanet drawing", type=["png", "jpg", "jpeg"])
+uploaded_file = st.file_uploader(
+    "Take a photo of your exoplanet drawing",
+    type=["png", "jpg", "jpeg"],
+    accept_multiple_files=False
+)
 
 if uploaded_file:
     st.image(uploaded_file, caption="Your input", use_container_width=True)
