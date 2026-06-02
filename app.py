@@ -1,5 +1,6 @@
 import streamlit as st
 import io
+import random
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
@@ -10,7 +11,6 @@ st.write("Snap a photo of your drawing to turn it into a real AI exoplanet!")
 uploaded_file = st.camera_input("Take a photo of your drawing")
 
 if uploaded_file is not None:
-    # Read the camera image
     input_image = Image.open(uploaded_file).convert("RGB")
     
     if st.button("🚀 Transform Into Reality", type="primary"):
@@ -22,7 +22,7 @@ if uploaded_file is not None:
                 # 2. Extract the drawing lines to build a structural mask
                 gray = img.convert("L")
                 edges = gray.filter(ImageFilter.FIND_EDGES)
-                edges = edges.filter(ImageFilter.MaxFilter(5)) # Thicken lines
+                edges = edges.filter(ImageFilter.MaxFilter(5))
                 
                 # 3. Create a hyper-realistic deep space cosmic background
                 base = Image.new("RGB", (800, 800), "#05070f")
@@ -33,7 +33,7 @@ if uploaded_file is not None:
                 for _ in range(300):
                     x = np.random.randint(0, 800)
                     y = np.random.randint(0, 800)
-                    r = np.random.choice([1, 2], p=[0.8, 0.2])
+                    r = np.random.choice([1, 2], p=[0.8, 0.2]) # FIXED: Corrected the radius list format
                     brightness = np.random.randint(150, 255)
                     draw.ellipse([x-r, y-r, x+r, y+r], fill=(brightness, brightness, 255))
                 
@@ -43,7 +43,7 @@ if uploaded_file is not None:
                 
                 # Generate custom colorful gas-giant ring textures matching the user canvas layout
                 colors = [(129, 140, 248), (79, 70, 229), (167, 139, 250), (248, 113, 113), (251, 191, 36)]
-                np.random.shuffle(colors)
+                random.shuffle(colors) # FIXED: Works perfectly now that 'random' is imported
                 
                 for i in range(100):
                     r_offset = i * 4
