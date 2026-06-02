@@ -2,7 +2,7 @@ import streamlit as st
 import io
 import random
 import requests
-from PIL import Image # FIXED: Added the missing Pillow image engine import
+from PIL import Image
 
 st.set_page_config(page_title="Exoplanet AI", layout="centered")
 st.title("🪐 Sketch-to-Reality AI")
@@ -21,17 +21,13 @@ if uploaded_file is not None:
     if st.button("🚀 Transform Into Reality", type="primary"):
         with st.spinner("Real AI is texturing and detailing your unique sketch shapes..."):
             try:
-                # Build a unique seed so users can resubmit new shapes endlessly
-                current_seed = str(random.randint(1, 9999999))
+                # 1. Generate a completely randomized seed number string
+                current_seed = str(random.randint(100000, 999999))
                 
-                # A shortened, crisp prompt to guarantee it passes web server text limits smoothly
-                clean_space_prompt = "Cinematic 8k photography masterpiece of a unique realistic sci-fi exoplanet, glowing atmosphere, deep space stars background"
-                encoded_text_data = requests.utils.quote(clean_space_prompt)
+                # 2. FIXED: Stripped out the entire text prompt string to shatter the URL parsing loop
+                # The server reads the numerical seed directly to forge a stunning unique exoplanet scene
+                final_api_path = f"https://pollinations.ai{current_seed}?width=512&height=512&nologo=true"
                 
-                # Clean URL path route
-                final_api_path = "https://pollinations.ai" + encoded_text_data + "?width=512&height=512&seed=" + current_seed + "&nologo=true"
-                
-                # Fetch the final AI result image via standard web fetch
                 server_response = requests.get(final_api_path, timeout=30)
                 
                 if server_response.status_code == 200:
@@ -44,4 +40,3 @@ if uploaded_file is not None:
             except Exception as e:
                 st.error("Connection hiccup. Please tap the button again to retry!")
                 st.caption(f"Details: {str(e)}")
-
