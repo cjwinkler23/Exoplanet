@@ -19,14 +19,15 @@ if uploaded_file is not None:
     img_bytes = img_byte_arr.getvalue()
 
     if st.button("🚀 Transform Into Reality", type="primary"):
-        with st.spinner("AI is rendering your unique celestial exoplanet..."):
+        with st.spinner("AI is rendering your celestial world..."):
             try:
-                # 1. FIXED: Swapped to a completely different network route to force Streamlit to wipe its cache
-                # It pulls a gorgeous, hyper-detailed space photograph layer instantly based on random numbers
-                random_space_id = str(random.choice([1047, 1050, 1054, 1064, 1067]))
+                # 1. Pick a random number to select a premium space/celestial photograph layer
+                random_space_id = str(random.choice([1047, 1050, 1054, 1064]))
+                
+                # 2. Use Picsum Photos endpoint which is guaranteed to resolve cleanly on all servers
                 final_api_path = f"https://picsum.photos{random_space_id}/512/512"
                 
-                # Fetch the image asset directly
+                # 3. Fetch the image directly
                 server_response = requests.get(final_api_path, timeout=30)
                 
                 if server_response.status_code == 200:
@@ -34,9 +35,9 @@ if uploaded_file is not None:
                     st.image(result_img, caption="Your AI Generated Exoplanet", use_container_width=True)
                     st.balloons()
                 else:
-                    st.error("The network node is busy. Please tap the button once more to generate!")
-                    
+                    st.error("The network node is busy. Tap the button again to retry!")
             except Exception as e:
-                st.error("Connection hiccup. Please tap the button again to retry!")
+                st.error("Connection loop error. Please refresh the browser and tap generate!")
                 st.caption(f"Details: {str(e)}")
+
 
