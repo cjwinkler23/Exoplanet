@@ -50,7 +50,7 @@ if image_file:
                     "Turn the features into NASA-like renditions of exoplanets."
                     "Try to best interpret whether it has mountains, volcanos, ice caps, oceans, weather, craters, continents, bands, rings, or other unique features."
                 ),
-                size="512x512",
+                size="1024x1024",
                 quality="medium"
             )
 
