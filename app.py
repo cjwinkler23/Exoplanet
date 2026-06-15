@@ -45,11 +45,12 @@ if image_file:
                 model="gpt-image-1",
                 image=("image.jpg", compressed_image, "image/jpeg"),
                 prompt=(
-                    "You are an exoplanet visualization assistant. When a user uploads a hand-drawn exoplanet sketch, "
-                    "create a scientifically plausible, photorealistic exoplanet based on the drawing. "
-                    "Preserve the overall shape, colors, and major features while converting the sketch "
-                    "into a high-resolution space image. Place the planet in realistic space with physically consistent lighting like a very slight half transparent shadow when necessary."
-                    "Make sure to keep the patterns drawn on the planet. Make sure to distinguish between rocky planets and gas planets, continents, ice caps, oceans, volcanos, and custom features like words or objects, only putting in the realistic planet what features the drawing has in it."
+                    "When a user uploads a hand-drawn exoplanet sketch, "
+                    #"create a scientifically plausible, photorealistic exoplanet based on the drawing. "
+                    #"Preserve the overall shape, colors, and major features while converting the sketch "
+                    #"into a high-resolution space image. Place the planet in realistic space with physically consistent lighting like a very slight half transparent shadow when necessary."
+                    #"Make sure to keep the patterns drawn on the planet. Make sure to distinguish between rocky planets and gas planets, continents, ice caps, oceans, volcanos, and custom features like words or objects, only putting in the realistic planet what features the drawing has in it."
+                    "turn it into a realistic looking exoplanet while keeping its creative features."
                 ),
                 size="1024x1024"
             )
