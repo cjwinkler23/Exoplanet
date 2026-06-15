@@ -46,9 +46,11 @@ if image_file:
                 image=("image.jpg", compressed_image, "image/jpeg"),
                 prompt=(
                     "When a user uploads a hand-drawn exoplanet sketch, "
-                    "turn it into a realistic looking exoplanet while keeping its creative features."
+                    "turn it into a hyperrealistic looking exoplanet in space while keeping its creative features."
+                    "Turn the features into NASA-like renditions of exoplanets."
+                    "Try to best interpret whether it has mountains, volcanos, ice caps, oceans, weather, craters, continents, bands, rings, or other unique features."
                 ),
-                size="1024x1024",
+                size="512x512",
                 quality="medium"
             )
 
