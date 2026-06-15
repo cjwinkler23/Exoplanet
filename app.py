@@ -20,7 +20,7 @@ def compress_and_resize(image_file):
         image = image.convert("RGB")
 
     # input cap (prevents huge uploads)
-    image.thumbnail((1024, 1024))
+    image.thumbnail((512, 512))
 
     buffer = io.BytesIO()
     image.save(buffer, format="JPEG", quality=60)
