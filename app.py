@@ -48,7 +48,7 @@ if image_file:
                     "When a user uploads a hand-drawn exoplanet sketch, "
                     "turn it into a hyperrealistic looking exoplanet in space while keeping its creative features."
                     "Turn the features into NASA-like renditions of exoplanets."
-                    "Try to best interpret whether it has mountains, volcanos, ice caps, oceans, weather, craters, continents, bands, rings, or other unique features."
+                    "Try to best interpret whether it has mountains, ice caps, oceans, weather, craters, continents, bands, rings, or other unique features."
                 ),
                 size="1024x1024",
                 quality="medium"
