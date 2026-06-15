@@ -23,7 +23,7 @@ def compress_and_resize(image_file):
     image.thumbnail((512, 512))
 
     buffer = io.BytesIO()
-    image.save(buffer, format="JPEG", quality=60)
+    image.save(buffer, format="JPEG", quality=85)
     buffer.seek(0)
 
     return buffer
@@ -46,7 +46,7 @@ if image_file:
                 image=("image.jpg", compressed_image, "image/jpeg"),
                 prompt=(
                     "When a user uploads a hand-drawn exoplanet sketch, "
-                    "turn it into a hyperrealistic looking exoplanet in space while keeping its creative features, colors, and landscapes."
+                    "turn it into a hyperrealistic looking exoplanet in space while preserving the drawing's creative features, colors, and landscapes."
                     "Turn the features into NASA-like renditions of exoplanets."
                     #"Try to best interpret whether it has mountains, ice caps, oceans, weather, craters, continents, bands, rings, or other unique features."
                     #"Only include the features drawn on the exoplanet. For example, if a rocky exoplanet is shown, keep it rocky, "
