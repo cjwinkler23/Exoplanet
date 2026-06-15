@@ -48,7 +48,7 @@ if image_file:
                     "When a user uploads a hand-drawn exoplanet sketch, "
                     "turn it into a realistic looking exoplanet while keeping its creative features."
                 ),
-                size="1024x1024"
+                size="512x512"
             )
 
         st.success("Done!")
