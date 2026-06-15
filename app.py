@@ -46,11 +46,11 @@ if image_file:
                 image=("image.jpg", compressed_image, "image/jpeg"),
                 prompt=(
                     "When a user uploads a hand-drawn exoplanet sketch, "
-                    "turn it into a hyperrealistic looking exoplanet in space while keeping its creative features and colors."
+                    "turn it into a hyperrealistic looking exoplanet in space while keeping its creative features, colors, and landscapes."
                     "Turn the features into NASA-like renditions of exoplanets."
-                    "Try to best interpret whether it has mountains, ice caps, oceans, weather, craters, continents, bands, rings, or other unique features."
-                    "Only include the features drawn on the exoplanet. For example, if a rocky exoplanet is shown, keep it rocky, "
-                    "and if a gas giant is drawn, keep it a gas giant."
+                    #"Try to best interpret whether it has mountains, ice caps, oceans, weather, craters, continents, bands, rings, or other unique features."
+                    #"Only include the features drawn on the exoplanet. For example, if a rocky exoplanet is shown, keep it rocky, "
+                    #"and if a gas giant is drawn, keep it a gas giant."
                 ),
                 size="1024x1024",
                 quality="medium"
