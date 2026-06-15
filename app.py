@@ -23,7 +23,7 @@ def compress_and_resize(image_file):
     image.thumbnail((1024, 1024))
 
     buffer = io.BytesIO()
-    image.save(buffer, format="JPEG", quality=85)
+    image.save(buffer, format="JPEG", quality=60)
     buffer.seek(0)
 
     return buffer
@@ -48,7 +48,8 @@ if image_file:
                     "When a user uploads a hand-drawn exoplanet sketch, "
                     "turn it into a realistic looking exoplanet while keeping its creative features."
                 ),
-                size="1024x1024"
+                size="1024x1024",
+                quality="medium"
             )
 
         st.success("Done!")
